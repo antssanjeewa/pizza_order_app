@@ -1,15 +1,26 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { Stack } from 'expo-router'
+import { Link, Stack } from 'expo-router'
 import React from 'react'
+import { Pressable } from 'react-native';
 
 function _layout() {
     return (
         <Stack>
             <Stack.Screen name="index" options={{
                 title: 'Menu',
-                // headerLeft: () => (
-                //     // <FontAwesome size={28} name='dashboard' style={{ marginBottom: -3 }} />
-                // )
+                headerRight: () => (
+                    <Link href={'/cart'} asChild>
+                        <Pressable>
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="shopping-cart"
+                                    size={25}
+                                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                />
+                            )}
+                        </Pressable>
+                    </Link>
+                )
             }} />
             <Stack.Screen name="[id]" options={{ title: 'Product Details' }} />
         </Stack>
