@@ -1,19 +1,28 @@
 import products from '@/assets/data/products';
-import { useLocalSearchParams } from 'expo-router'
+import { useCart } from '@/src/provider/cartProvider';
+import { PizzaSize } from '@/src/types';
+import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const sizes = ["S", "M", "L", "XL"];
+const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
 function ProductDetails() {
 
     const { id } = useLocalSearchParams();
-    const [selectedSize, setSelectedSize] = useState(sizes[0]);
+    const [selectedSize, setSelectedSize] = useState<PizzaSize>(sizes[0]);
     const product = products.find((p) => p.id.toString() == id);
+
+    const { addItem } = useCart();
 
 
     if (!product) {
         return <Text>No Found...</Text>
+    }
+
+    const addItemToCart = () => {
+        addItem(product, selectedSize)
+        router.back();
     }
 
     return (
@@ -33,7 +42,7 @@ function ProductDetails() {
 
             <Text style={styles.priceText}>Price: ${product.price}</Text>
 
-            <TouchableOpacity style={styles.btnContainer} >
+            <TouchableOpacity style={styles.btnContainer} onPress={addItemToCart}>
                 <Text style={styles.btnText}>Add to cart</Text>
             </TouchableOpacity>
 
