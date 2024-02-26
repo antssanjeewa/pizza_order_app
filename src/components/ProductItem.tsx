@@ -1,7 +1,6 @@
-import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Product } from "../types";
-import { router } from 'expo-router';
+import { router, useSegments } from 'expo-router';
 
 
 type ProductItemProps = {
@@ -9,8 +8,11 @@ type ProductItemProps = {
 }
 
 function ProductItem({ item }: ProductItemProps) {
+    const segments = useSegments();
+    const route = `/${segments[0]}/product/${item.id}`;
+
     return (
-        <TouchableOpacity style={styles.container} onPress={() => router.push(`/product/${item.id}`)}>
+        <TouchableOpacity style={styles.container} onPress={() => router.push(route)}>
             <Image style={styles.image} source={{ uri: item.image ?? '' }} />
             <Text style={styles.title}>{item.name}</Text>
             <Text style={styles.price}>${item.price}</Text>
