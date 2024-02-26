@@ -5,8 +5,10 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-import { useColorScheme } from '@/src/components/useColorScheme';
-import CartProvider from '@/src/provider/cartProvider';
+import { useColorScheme } from '@components/useColorScheme';
+import CartProvider from '@/provider/cartProvider';
+import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -56,6 +58,8 @@ function RootLayoutNav() {
           <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
         </Stack>
       </CartProvider>
+
+      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </ThemeProvider>
   );
 }

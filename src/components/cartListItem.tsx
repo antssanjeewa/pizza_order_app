@@ -1,11 +1,15 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { CartItem } from '../types'
+import { useCart } from '@/provider/cartProvider';
+import { FontAwesome } from '@expo/vector-icons';
 
 type CartListItemProps = {
     item: CartItem;
 };
 
 const CartListItem = ({ item }: CartListItemProps) => {
+
+    const { updateItem } = useCart();
 
     return (
         <View style={styles.container}>
@@ -21,9 +25,15 @@ const CartListItem = ({ item }: CartListItemProps) => {
             </View>
 
             <View style={styles.countWrapper}>
-                <Text >-</Text>
+                <TouchableOpacity onPress={() => updateItem(item.id, -1)}>
+                    <FontAwesome name='minus' style={styles.actionIcon} />
+                </TouchableOpacity>
+
                 <Text style={styles.countText}>{item.quantity}</Text>
-                <Text >+</Text>
+
+                <TouchableOpacity onPress={() => updateItem(item.id, 1)}>
+                    <FontAwesome name='plus' style={styles.actionIcon} />
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -65,9 +75,13 @@ const styles = StyleSheet.create({
 
     countWrapper: {
         flexDirection: 'row',
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        alignItems: 'center'
     },
     countText: {
         paddingHorizontal: 10
+    },
+    actionIcon: {
+        padding: 10
     }
 })

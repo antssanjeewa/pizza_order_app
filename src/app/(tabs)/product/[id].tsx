@@ -1,6 +1,6 @@
-import products from '@/assets/data/products';
-import { useCart } from '@/src/provider/cartProvider';
-import { PizzaSize } from '@/src/types';
+import products from '@assets/data/products';
+import { useCart } from '@/provider/cartProvider';
+import { PizzaSize } from '@/types';
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
@@ -22,7 +22,7 @@ function ProductDetails() {
 
     const addItemToCart = () => {
         addItem(product, selectedSize)
-        router.back();
+        router.push('/cart');
     }
 
     return (
@@ -33,7 +33,7 @@ function ProductDetails() {
             <View style={styles.sizeContainer}>
                 {sizes.map((size) => (
                     <TouchableOpacity style={[styles.sizeWrapper, {
-                        backgroundColor: selectedSize == size ? '#ccc' : ''
+                        backgroundColor: selectedSize == size ? '#ccc' : '#fff'
                     }]} key={size} onPress={() => setSelectedSize(size)}>
                         <Text style={[styles.sizeText, { color: selectedSize == size ? 'black' : 'gray' }]}>{size}</Text>
                     </TouchableOpacity>

@@ -4,10 +4,16 @@
     "strict": true,
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ],
-      "@/components/*": [
+      "@assets/*": [
+        "./assets/*"
+      ],
+      "@components/*": [
         "./src/components/*"
+      ],
+      "@constants/*": [
+        "./src/constants/*"
       ],
     }
   },
