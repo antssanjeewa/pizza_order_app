@@ -4,6 +4,7 @@ import { PizzaSize } from '@/types';
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Button from '@/components/Button';
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -42,9 +43,7 @@ function ProductDetails() {
 
             <Text style={styles.priceText}>Price: ${product.price}</Text>
 
-            <TouchableOpacity style={styles.btnContainer} onPress={addItemToCart}>
-                <Text style={styles.btnText}>Add to cart</Text>
-            </TouchableOpacity>
+            <Button action={addItemToCart} name="Add to cart" />
 
         </View>
     )
