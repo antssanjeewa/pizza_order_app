@@ -1,10 +1,12 @@
-import products from '@assets/data/products';
 import { useCart } from '@/provider/cartProvider';
 import { PizzaSize } from '@/types';
-import { router, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Button from '@/components/Button';
+import { useProduct } from '@/app/api/products';
+import { FontAwesome } from '@expo/vector-icons';
+import Colors from '@/constants/Colors';
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -12,23 +14,45 @@ function ProductDetails() {
 
     const { id } = useLocalSearchParams();
     const [selectedSize, setSelectedSize] = useState<PizzaSize>(sizes[0]);
-    const product = products.find((p) => p.id.toString() == id);
 
     const { addItem } = useCart();
 
 
-    if (!product) {
-        return <Text>No Found...</Text>
-    }
+    const {
+        data: product,
+        isLoading,
+        error,
+    } = useProduct(parseInt(typeof id === 'string' ? id : id[0]));
 
     const addItemToCart = () => {
-        addItem(product, selectedSize)
-        router.push('/cart');
+        if (product) {
+            addItem(product, selectedSize)
+            router.push('/cart');
+        }
     }
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={{ uri: product.image }} />
+
+            <Stack.Screen options={{
+                title: 'Product Details',
+                headerRight: () => (
+                    <Link href={`/(admin)/product/create?id=${id}`} asChild>
+                        <Pressable>
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="pencil"
+                                    size={25}
+                                    color={Colors.light.tint}
+                                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                />
+                            )}
+                        </Pressable>
+                    </Link>
+                )
+            }} />
+
+            <Image style={styles.image} source={{ uri: product?.image ?? '/' }} />
 
             <Text style={styles.sizeLabel}>Select size</Text>
             <View style={styles.sizeContainer}>
@@ -41,7 +65,7 @@ function ProductDetails() {
                 ))}
             </View>
 
-            <Text style={styles.priceText}>Price: ${product.price}</Text>
+            <Text style={styles.priceText}>Price: ${product?.price}</Text>
 
             <Button action={addItemToCart} name="Add to cart" />
 

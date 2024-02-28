@@ -1,20 +1,38 @@
 import { View, Text, StyleSheet, Image, TextInput, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@/components/Button'
 import { Images } from '@/constants';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/app/api/products';
 
 const CreateProduct = () => {
 
-    const { id } = useLocalSearchParams();
-    const isUpdate = !!id;
+    const { id: idString } = useLocalSearchParams();
+    const id = parseFloat(typeof idString === 'string' ? idString : idString?.[0]);
+    const isUpdate = !!idString;
+
+
+
+    const { mutate: insertProduct } = useInsertProduct();
+    const { mutate: updateProduct } = useUpdateProduct();
+    const { mutate: deleteProduct } = useDeleteProduct();
+    const { data: updatedProduct } = useProduct(id);
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
 
     const [error, setError] = useState('');
     const [image, setImage] = useState<string | null>(null);
+
+
+    useEffect(() => {
+        if (updatedProduct) {
+            setName(updatedProduct.name)
+            setPrice(updatedProduct.price.toString())
+            setImage(updatedProduct.image)
+        }
+    }, [updatedProduct])
 
     const validateInput = () => {
         setError('')
@@ -34,21 +52,51 @@ const CreateProduct = () => {
         return true;
     }
 
+    const resetFields = () => {
+        setName('');
+        setPrice('');
+    }
+
     const saveData = () => {
         if (!validateInput()) {
             return;
         }
 
         if (isUpdate) {
-            updateProduct();
+            updateProduct(
+                { id, name, price: parseFloat(price), image },
+                {
+                    onSuccess: () => {
+                        resetFields();
+                        router.back();
+                    },
+                }
+            );
         } else {
             createProduct();
         }
     }
 
-    const createProduct = () => { }
-    const updateProduct = () => { }
-    const deleteProduct = () => { }
+    const createProduct = () => {
+        insertProduct(
+            { name, price: parseFloat(price), image },
+            {
+                onSuccess: () => {
+                    resetFields();
+                    router.back();
+                },
+            }
+        );
+    }
+
+    const onDelete = () => {
+        deleteProduct(id, {
+            onSuccess: () => {
+                resetFields();
+                router.replace('/(admin)/product')
+            }
+        })
+    }
     const deleteData = () => {
         Alert.alert("Confirm", "Are you sure, you want to delete This..", [
             {
@@ -57,7 +105,7 @@ const CreateProduct = () => {
             {
                 text: "Confirm",
                 style: 'destructive',
-                onPress: deleteProduct
+                onPress: onDelete
             }
         ])
     }
@@ -105,7 +153,7 @@ const CreateProduct = () => {
 
             <Button name="Create" action={saveData} />
 
-            <Button name="Delete" action={deleteData} />
+            {isUpdate && <Button name="Delete" action={deleteData} />}
         </View>
     )
 }

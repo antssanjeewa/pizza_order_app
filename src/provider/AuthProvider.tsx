@@ -22,8 +22,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         const fetchSession = async () => {
-            const { data } = await supabase.auth.getSession();
-            setSession(data.session)
+            const { data: { session } } = await supabase.auth.getSession();
+            setSession(session)
 
             if (session) {
                 // fetch profile

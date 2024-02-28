@@ -1,9 +1,9 @@
-import products from '@assets/data/products';
 import { useCart } from '@/provider/cartProvider';
 import { PizzaSize } from '@/types';
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useProduct } from '@/app/api/products';
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -11,13 +11,20 @@ function ProductDetails() {
 
     const { id } = useLocalSearchParams();
     const [selectedSize, setSelectedSize] = useState<PizzaSize>(sizes[0]);
-    const product = products.find((p) => p.id.toString() == id);
 
     const { addItem } = useCart();
 
+    const {
+        data: product,
+        isLoading,
+        error,
+    } = useProduct(parseInt(typeof id === 'string' ? id : id[0]));
 
-    if (!product) {
-        return <Text>No Found...</Text>
+    if (isLoading) {
+        return <ActivityIndicator />;
+    }
+    if (error || !product) {
+        return <Text>Failed to fetch product</Text>;
     }
 
     const addItemToCart = () => {
@@ -27,7 +34,7 @@ function ProductDetails() {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={{ uri: product.image }} />
+            <Image style={styles.image} source={{ uri: product.image ?? '' }} />
 
             <Text style={styles.sizeLabel}>Select size</Text>
             <View style={styles.sizeContainer}>
