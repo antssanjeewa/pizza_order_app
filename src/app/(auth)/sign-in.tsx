@@ -1,9 +1,9 @@
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import React, { useState } from 'react';
-import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import { Link, Stack, router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
+import { Button } from 'react-native';
 
 const SignInScreen = () => {
     const [email, setEmail] = useState('');
@@ -43,7 +43,7 @@ const SignInScreen = () => {
             />
 
 
-            <Button onPress={signInWithEmail} text="Login" />
+            <Button onPress={signInWithEmail} title="Login" disabled={loading} />
 
             <Link href="/sign-up" style={styles.textButton}>
                 Create an account

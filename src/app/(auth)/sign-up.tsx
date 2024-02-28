@@ -1,6 +1,5 @@
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, Button } from 'react-native';
 import React, { useState } from 'react';
-import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import { Link, Stack } from 'expo-router';
 import { supabase } from '@/lib/supabase';
@@ -43,7 +42,7 @@ const SignUpScreen = () => {
                 secureTextEntry
             />
 
-            <Button onPress={signUpWithEmail} text="Create account" />
+            <Button onPress={signUpWithEmail} title="Create account" disabled={loading} />
 
             <Link href="/sign-in" style={styles.textButton}>
                 Sign in
