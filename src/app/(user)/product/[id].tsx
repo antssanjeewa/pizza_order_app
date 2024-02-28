@@ -3,7 +3,7 @@ import { PizzaSize } from '@/types';
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useProduct } from '@/app/api/products';
+import { useProduct } from '@/api/products';
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 

@@ -26,11 +26,9 @@ const index = () => {
                 <Text>Admin</Text>
             </Link>
 
-            <Link replace style={styles.button} href={'/sign-in'}>
-                <Text>Auth</Text>
-            </Link>
-
-            <Button onPress={() => supabase.auth.signOut()} title='Sign Out' />
+            <View style={styles.button}>
+                <Button onPress={() => supabase.auth.signOut()} title='Sign Out' />
+            </View>
         </View>
     );
 };

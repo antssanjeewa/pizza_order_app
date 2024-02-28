@@ -4,7 +4,7 @@ import Button from '@/components/Button'
 import { Images } from '@/constants';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/app/api/products';
+import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/api/products';
 
 const CreateProduct = () => {
 

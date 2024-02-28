@@ -4,7 +4,7 @@ import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Button from '@/components/Button';
-import { useProduct } from '@/app/api/products';
+import { useProduct } from '@/api/products';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 
